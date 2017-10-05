@@ -95,20 +95,15 @@ SELECT DISTINCT(name), count(project_id) AS num_projects_using FROM tech
 
 -- 14.
 
-SELECT DISTINCT(name), count(tech_id) AS num_tech_used FROM project
-	LEFT OUTER JOIN project_uses_tech
-		ON project.id = project_uses_tech.project_id
-		GROUP BY project.name
-		ORDER BY num_tech_used;
-		
-SELECT
-	AVG(count)
-FROM (SELECT
-	DISTINCT(name),
-	count(tech_id)
-FROM
+select
+	project.id,
+	project.name,
+	count(project_uses_tech.tech_id) as my_count
+from
 	project
-INNER JOIN project_uses_tech
-	ON project.id = project_uses_tech.project_id
-	GROUP BY project.name
-	ORDER BY;
+left outer join
+	project_uses_tech on project_uses_tech.project_id = project.id
+group by
+	project.id
+order by
+	my_count;
